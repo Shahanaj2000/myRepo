@@ -1,5 +1,5 @@
 var express = require('express');
-const {render} = require('../app');
+const {render, response} = require('../app');
 const productHelper = require('../helpers/product-helpers');
 var router = express.Router();
 
@@ -31,5 +31,15 @@ router.post('/add-product',(req,res) => {
     })
     
   })
+})
+
+
+router.get('/delete-product/:id',(req,res)=> { 
+  let prodId = req.params.id
+  console.log(prodId);
+ productHelper.deleteProduct(prodId).then((response)=> {
+    res.redirect('/admin/')      
+  })
+  //console.log(req.query.name);
 })
 module.exports = router;
