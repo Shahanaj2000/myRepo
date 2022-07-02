@@ -42,4 +42,24 @@ router.get('/delete-product/:id',(req,res)=> {
   })
   //console.log(req.query.name);
 })
+
+router.get('/edit-product/:id', async(req,res)=> {
+  //Take product from DB
+  let product = await productHelper.getProductDetails(req.params.id)
+  console.log(product); 
+  res.render('admin/edit-product',{product})
+})
+router.post('/edit-product/:id', (req, res) => {
+  console.log(req.params.id);
+  console.log(req.body);
+  let id = req.params.id
+    productHelper.editProduct(req.params.id, req.body).then(() => {
+      res.redirect('/admin')
+      if(req.files.Image) {
+        let image = req.files.Image
+        image.mv('./public/product-images/'+id+'.jpg')
+      }        
+  })
+})
 module.exports = router;
+  
