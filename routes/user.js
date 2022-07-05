@@ -43,6 +43,9 @@ router.get('/signup',(req, res) => {
 router.post('/signup',(req,res) => {
   userHelpers.doSignup(req.body).then((response)=> {
     console.log(response);
+    req.session.loggedIn = true
+    req.session.user = response
+    res.redirect('/')
   })
 })
 
@@ -54,7 +57,7 @@ router.post('/login',(req, res)=> {
       res.redirect('/') 
     }
     else {
-      req.session.loginErr = true 
+      req.session.loginErr = "Invalid Username or Password" //true
       res.redirect('/login')
     }
    })
@@ -68,6 +71,13 @@ router.get('/logout',(req,res) => {
 router.get('/cart',verifyLogin,(req,res) => {
    res.render('user/cart')
 })
+
+router.get('/add-to-cart/:id',verifyLogin, (req,res) => {
+  userHelpers.addToCart(req.params.id, req.session.user._id).then(() => {
+    res.redirect('/')
+  })
+})
+
 
 
 
