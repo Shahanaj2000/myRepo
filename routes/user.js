@@ -29,7 +29,7 @@ router.get('/login',(req, res) => {
     res.redirect('/')
   }
   else {
-    res.render('user/login',{"loginErr":req.session.loginErr})
+    res.render('user/login',{loginErr:req.session.loginErr})
     //console.log("...");
     req.session.loginErr  = false
   }
@@ -57,7 +57,7 @@ router.post('/login',(req, res)=> {
       res.redirect('/') 
     }
     else {
-      req.session.loginErr = "Invalid Username or Password" //true
+      req.session.loginErr = true
       res.redirect('/login')
     }
    })
