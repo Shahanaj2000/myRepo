@@ -6,38 +6,65 @@ const { response } = require('../app')
 var objectId = require('mongodb').ObjectId
 
 module.exports = {
-    doSignup:(userData)=> {
-        return new Promise(async(resolve,reject)=> {
+    doSignup:(userData) => {
+        return new Promise( async(resolve, reject) => {
             userData.Password = await bcrypt.hash(userData.Password,10)
-            db.get().collection(collection.USER_COLLECTIONS).insertOne(userData).then((data)=> {
+            db.get().collection(collection.USER_COLLECTIONS).insertOne(userData).the((data) => {
                 resolve(data)
             })
         })
-        
     },
     //To check email and password 
-    doLogin:(userData) => {
-        return new Promise(async(resolve,reject)=> {
-            let loginStatus =false
+    /*doLogin:(userData) => {
+        return new Promise( async(resolve, reject) => {
+            console.log("*****"); 
+            let loginStatus = false
             let response = {}
             let user = await db.get().collection(collection.USER_COLLECTIONS).findOne({Email:userData.Email})
             if(user) {
                 bcrypt.compare(userData.Password, user.Password).then((status)=> {
                     if(status) {
                         console.log("login successfully");
-                        response.user = user
-                        response.status = true
-                        resolve(response)
+                         response.user = user 
+                         response.status = true
+                         resolve(response)
+                        
                     }
                     else{
-                        console.log("Login failed");
-                        resolve({status:false})
+                        console.log("Login failed"); 
+                         resolve({status:false})
                     }
                 })
             }
             else {
                 console.log("User does not exists"); 
-                resolve({status:false}) 
+                 resolve({status:false})  
+            }
+        })
+    },*/
+    doLogin:(userData) => {
+        console.log("_____");
+        return new Promise(async (resolve, reject) => {
+            console.log("!!!!!!");
+            let loginStatus = false
+            console.log("#####");
+            let response = {}
+            let user = await db.get().collection(collection.USER_COLLECTIONS).findOne({Email:userData.Email})
+            if(user) {
+                bcrypt.compare(userData.Password,user.Password).then((status) => {
+                    if(status) {
+                        console.log("login success");
+                        response.user = user
+                        response.status = true
+                        resolve(response)
+                    }else {
+                        console.log("login failed");
+                        resolve({status:false})
+                    }
+                })
+            }else {
+                console.log("login failed");
+                resolve({status:false})
             }
         })
     },
@@ -49,13 +76,13 @@ module.exports = {
 
             }else {
                 let cartObj = {
-                    user:objectId(userId),
+                    user:objectId(userId),  
                     products:[objectId(prodId)]
-                }
+                     }
                 db.get().collection(collection.CART_COLLECTION).insertOne(cartObj).then((response) => {
                     resolve()
                 })
             }
-        })
+        }) 
     }
 }
